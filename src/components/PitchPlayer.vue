@@ -8,17 +8,33 @@ const props = defineProps({
 })
 
 let playedNote = ref('')
+let selectedNote = ref('');
 
-const getRandomNote = computed(() => {
+const checkNote = (note) => {
+    const isRight = note === playedNote.value
+    return isRight;
+};
+
+const selectNote = (note) => {
+    selectedNote.value = note;
+
+    if(note === playedNote.value) {
+        setTimeout(() => {
+            selectedNote.value = ''
+            getRandomNote()
+            getNewNote()
+        }, 500)
+    }
+};
+
+const getRandomNote = () => {
     const scaleRange = {min: 1, between: 4, max: 7}
     const scaleInRange = []
     let lower = scaleRange.between
     let higher = scaleRange.between
 
     for (let i = 0; i < props.scales; i++) {
-        if(i === 0) {
-            scaleInRange.push(scaleRange.between)
-        }
+        if(i === 0) scaleInRange.push(scaleRange.between)
         else {
             if(lower > scaleRange.min && i % 2 === 0) {
                 lower = lower - 1
@@ -32,37 +48,39 @@ const getRandomNote = computed(() => {
         }
     }
 
-    playedNote = props.notes[Math.floor(Math.random()*props.notes.length)]
-
+    playedNote.value = props.notes[Math.floor(Math.random()*props.notes.length)]
     return props.notes[Math.floor(Math.random()*props.notes.length)] + scaleInRange[Math.floor(Math.random()*scaleInRange.length)]
-});
+};
 
-const guessNote = (note) => {
-    buttonClass.value = note === playedNote ? "success" : "error"
+const getNewNote = () => {
+    playNote = new Howl({
+        src: [require(`@/assets/notes/${getRandomNote()}.mp3`)]
+    });
+
+    playNote.play()
 }
 
 let playNote = new Howl({
-  src: [require(`@/assets/notes/${getRandomNote.value}.mp3`)]
+  src: [require(`@/assets/notes/${getRandomNote()}.mp3`)]
 });
 
 watch(props, () => {
-    playNote = new Howl({
-        src: [require(`@/assets/notes/${getRandomNote.value}.mp3`)]
-    });
+    selectedNote.value = ''
+    getRandomNote()
+    getNewNote()
 })
 
 </script>
 
 <template>
-    <div id="hear">
+    <div>
         <button @click="playNote.play()">Hear note</button>
     </div>
     <div>
-        <button @click="guessNote(note)" :class="buttonClass" v-for="note in props.notes" :key="note">
+        <button v-for="note in props.notes" :key="note" 
+                :class="{ 'success': selectedNote === note && checkNote(note), 'error': selectedNote === note && !checkNote(note) }"
+                @click="selectNote(note)">
             {{ note }}
         </button>
     </div>
 </template>
-
-<style>
-</style>

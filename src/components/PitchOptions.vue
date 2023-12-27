@@ -38,7 +38,7 @@ watch(activeNotes, (n) => {
     <input v-model="scales" type="number" value="{{ props.startScales }}" min="1" max="7">
 </template>
 
-<style lang="scss">
+<style>
 .piano {
     display: grid;
     grid-template-columns: repeat(12, 1fr);
