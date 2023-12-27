@@ -34,7 +34,7 @@ watch(activeNotes, (n) => {
         {{ note }}
     </button>
 
-    <h2>Scales</h2>
+    <h2>Number of scales</h2>
     <input v-model="scales" type="number" value="{{ props.startScales }}" min="1" max="7">
 </template>
 

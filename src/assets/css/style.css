@@ -130,6 +130,15 @@ input[type='button']:hover {
   background: #324759;
 }
 
+button.success {
+  background: green;
+}
+
+button.error {
+  background: red;
+}
+
+
 input:focus,
 select:focus,
 button:focus,

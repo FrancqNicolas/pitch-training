@@ -1,11 +1,13 @@
 <script setup>
 import { Howl } from 'howler';
-import { computed, watch } from 'vue';
+import { computed, watch, ref } from 'vue';
 
 const props = defineProps({
     notes: Array,
     scales: Number
 })
+
+let playedNote = ref('')
 
 const getRandomNote = computed(() => {
     const scaleRange = {min: 1, between: 4, max: 7}
@@ -30,8 +32,14 @@ const getRandomNote = computed(() => {
         }
     }
 
+    playedNote = props.notes[Math.floor(Math.random()*props.notes.length)]
+
     return props.notes[Math.floor(Math.random()*props.notes.length)] + scaleInRange[Math.floor(Math.random()*scaleInRange.length)]
 });
+
+const guessNote = (note) => {
+    buttonClass.value = note === playedNote ? "success" : "error"
+}
 
 let playNote = new Howl({
   src: [require(`@/assets/notes/${getRandomNote.value}.mp3`)]
@@ -46,5 +54,15 @@ watch(props, () => {
 </script>
 
 <template>
-    <button @click="playNote.play()">joue</button>
+    <div id="hear">
+        <button @click="playNote.play()">Hear note</button>
+    </div>
+    <div>
+        <button @click="guessNote(note)" :class="buttonClass" v-for="note in props.notes" :key="note">
+            {{ note }}
+        </button>
+    </div>
 </template>
+
+<style>
+</style>
