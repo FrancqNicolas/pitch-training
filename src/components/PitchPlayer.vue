@@ -11,8 +11,7 @@ let playedNote = ref('')
 let selectedNote = ref('');
 
 const checkNote = (note) => {
-    const isRight = note === playedNote.value
-    return isRight;
+    return note === playedNote.value;
 };
 
 const selectNote = (note) => {
@@ -21,8 +20,8 @@ const selectNote = (note) => {
     if(note === playedNote.value) {
         setTimeout(() => {
             selectedNote.value = ''
-            getRandomNote()
-            getNewNote()
+            const newNote = getRandomNote()
+            getNewNote(newNote)
         }, 500)
     }
 };
@@ -52,12 +51,15 @@ const getRandomNote = () => {
     return props.notes[Math.floor(Math.random()*props.notes.length)] + scaleInRange[Math.floor(Math.random()*scaleInRange.length)]
 };
 
-const getNewNote = () => {
+const getNewNote = (note) => {
     playNote = new Howl({
-        src: [require(`@/assets/notes/${getRandomNote()}.mp3`)]
+        src: [require(`@/assets/notes/${note}.mp3`)]
     });
 
+    playedNote.value = note.charAt(0)
+
     playNote.play()
+    console.log("fun")
 }
 
 let playNote = new Howl({
@@ -66,8 +68,8 @@ let playNote = new Howl({
 
 watch(props, () => {
     selectedNote.value = ''
-    getRandomNote()
-    getNewNote()
+    const newNote = getRandomNote()
+    getNewNote(newNote)
 })
 
 </script>
