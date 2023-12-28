@@ -1,5 +1,6 @@
 <script setup>
 import { Howl } from 'howler';
+import piano from '@/assets/notes/notes'
 import { computed, watch, ref } from 'vue';
 
 const props = defineProps({
@@ -53,7 +54,7 @@ const getRandomNote = () => {
 
 const getNewNote = (note) => {
     playNote = new Howl({
-        src: [require(`@/assets/notes/${note}.mp3`)]
+        src: [piano[note]]
     });
 
     playedNote.value = note.charAt(0)
@@ -63,7 +64,7 @@ const getNewNote = (note) => {
 }
 
 let playNote = new Howl({
-  src: [require(`@/assets/notes/${getRandomNote()}.mp3`)]
+  src: [piano[getRandomNote()]]
 });
 
 watch(props, () => {
