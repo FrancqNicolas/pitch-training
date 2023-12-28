@@ -1,7 +1,7 @@
 <script setup>
 import { Howl } from 'howler';
 import piano from '@/assets/notes/notes'
-import { computed, watch, ref } from 'vue';
+import { defineProps, watch, ref } from 'vue';
 
 const props = defineProps({
     notes: Array,

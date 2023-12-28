@@ -1,5 +1,5 @@
 <script setup>
-import { ref, watch } from 'vue';
+import { ref } from 'vue';
 import PitchPlayer from './components/PitchPlayer.vue';
 import PitchOptions from './components/PitchOptions.vue';
 
