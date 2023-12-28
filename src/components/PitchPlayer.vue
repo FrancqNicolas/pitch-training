@@ -9,7 +9,8 @@ const props = defineProps({
 })
 
 let playedNote = ref('')
-let selectedNote = ref('');
+let selectedNote = ref('')
+const streak = ref(0)
 
 const checkNote = (note) => {
     return note === playedNote.value;
@@ -19,11 +20,14 @@ const selectNote = (note) => {
     selectedNote.value = note;
 
     if(note === playedNote.value) {
+        streak.value++
         setTimeout(() => {
             selectedNote.value = ''
             const newNote = getRandomNote()
             getNewNote(newNote)
         }, 500)
+    } else {
+        streak.value = 0
     }
 };
 
@@ -60,7 +64,6 @@ const getNewNote = (note) => {
     playedNote.value = note.charAt(0)
 
     playNote.play()
-    console.log("fun")
 }
 
 let playNote = new Howl({
@@ -77,6 +80,7 @@ watch(props, () => {
 
 <template>
     <div>
+        Best streak: {{ streak }}
         <button @click="playNote.play()">Hear note</button>
     </div>
     <div>
