@@ -61,7 +61,7 @@ const getNewNote = (note) => {
         src: [piano[note]]
     });
 
-    playedNote.value = note.charAt(2) !== "#" ? note.charAt(0) : note.slice(0, 2)
+    playedNote.value = note.charAt(1) !== "#" ? note.charAt(0) : note.slice(0, 2)
 
     playNote.play()
 }
