@@ -10,7 +10,8 @@ const props = defineProps({
 
 let playedNote = ref('')
 let selectedNote = ref('')
-const streak = ref(0)
+const currentStreak = ref(0)
+const bestStreak = ref(localStorage.bestStreak ?? 0)
 
 const checkNote = (note) => {
     return note === playedNote.value;
@@ -20,14 +21,20 @@ const selectNote = (note) => {
     selectedNote.value = note;
 
     if(note === playedNote.value) {
-        streak.value++
+        currentStreak.value++
+        
+        if(currentStreak.value > bestStreak.value) {
+            bestStreak.value = currentStreak.value
+            localStorage.bestStreak = currentStreak.value
+        }
+        
         setTimeout(() => {
             selectedNote.value = ''
             const newNote = getRandomNote()
             getNewNote(newNote)
         }, 500)
     } else {
-        streak.value = 0
+        currentStreak.value = 0
     }
 };
 
@@ -80,7 +87,8 @@ watch(props, () => {
 
 <template>
     <div>
-        Best streak: {{ streak }}
+        Current streak: {{ currentStreak }}
+        Best streak: {{ bestStreak }}
         <button @click="playNote.play()">Hear note</button>
     </div>
     <div>
